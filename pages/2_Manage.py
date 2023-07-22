@@ -63,7 +63,7 @@ def click_button():
 
 # Initialize Pinecone with API key and environment
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
-passme = st.sidebar.text_input("Write Password:")
+passme = st.sidebar.text_input("Write Password:", type="password")
 if passme == "manageme":
     # Checkbox for the first option to document upload
     first_opt = st.checkbox('Create New Index to Upload Documents')
