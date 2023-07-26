@@ -49,7 +49,7 @@ model_name = st.sidebar.selectbox(label="Select Model", options=MODEL_OPTIONS)
 pinecone_index_list = select_index(param1)
 pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
 
-@st.cache_data
+@st.cache_resource
 def ret(pinecone_index):
     if pinecone_index != "":
         # load a Pinecone index
