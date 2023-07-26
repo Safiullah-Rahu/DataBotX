@@ -27,11 +27,15 @@ PINECONE_ENV = st.secrets.secrets.PINECONE_ENV
 os.environ["PINECONE_ENV"] = PINECONE_ENV
 # Initialize Pinecone with API key and environment
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENV)
-def select_index():
+param1 = True
+@st.cache_data
+def select_index(param1):
     #time.sleep(10)
-    st.sidebar.write("Existing Indexes:👇")
-    st.sidebar.write(pinecone.list_indexes())
-    pinecone_index = st.sidebar.text_input("Write Name of Index to load: ")
+    if param1:
+        st.sidebar.write("Existing Indexes:👇")
+        #st.sidebar.write(pinecone.list_indexes())
+        pinecone_index = st.sidebar.selectbox(label="Select Index", options=pinecone.list_indexes())
+        #pinecone_index = st.sidebar.text_input("Write Name of Index to load: ")
     return pinecone_index
 
 # Set the text field for embeddings
@@ -41,7 +45,7 @@ embeddings = OpenAIEmbeddings(model = 'text-embedding-ada-002')
 MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4"]
 model_name = st.sidebar.selectbox(label="Select Model", options=MODEL_OPTIONS)
 
-pinecone_index = select_index()
+pinecone_index = select_index(param1)
 
 def chat(pinecone_index):
 
