@@ -60,7 +60,7 @@ param1 = True
 def select_index(param1):
     #time.sleep(10)
     if param1:
-        st.sidebar.write("Existing Indexes:👇")
+        #st.sidebar.write("Existing Indexes:👇")
         #st.sidebar.write(pinecone.list_indexes())
         pinecone_index_list = pinecone.list_indexes()
         #pinecone_index = st.sidebar.selectbox(label="Select Index", options=pinecone.list_indexes())
@@ -144,7 +144,7 @@ if passme == "manageme":
             time.sleep(10)
             st.write("Existing Indexes:👇")
             pinecone_index_list = select_index(param1)
-            pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
+            pinecone_index = st.selectbox(label="Select Index", options = pinecone_index_list )
             # st.write(pinecone.list_indexes())
             # pinecone_index = st.text_input("Write Name of Existing Index: ")
             up_check = st.checkbox('Check this to Upload Docs in Selected Index')
@@ -161,7 +161,7 @@ if passme == "manageme":
         time.sleep(10)
         st.write("Existing Indexes:👇")
         pinecone_index_list = select_index(param1)
-        pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
+        pinecone_index = st.selectbox(label="Select Index", options = pinecone_index_list )
         #st.write(pinecone.list_indexes())
         #pinecone_index = st.text_input("Write Name of Existing Index to delete: ")
         st.write(f"The Index named '{pinecone_index}' is selected for deletion.")
