@@ -34,9 +34,10 @@ def select_index(param1):
     if param1:
         st.sidebar.write("Existing Indexes:👇")
         #st.sidebar.write(pinecone.list_indexes())
-        pinecone_index = st.sidebar.selectbox(label="Select Index", options=pinecone.list_indexes())
+        pinecone_index_list = pinecone.list_indexes()
+        #pinecone_index = st.sidebar.selectbox(label="Select Index", options=pinecone.list_indexes())
         #pinecone_index = st.sidebar.text_input("Write Name of Index to load: ")
-    return pinecone_index
+    return pinecone_index_list
 
 # Set the text field for embeddings
 text_field = "text"
@@ -45,8 +46,8 @@ embeddings = OpenAIEmbeddings(model = 'text-embedding-ada-002')
 MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4"]
 model_name = st.sidebar.selectbox(label="Select Model", options=MODEL_OPTIONS)
 
-pinecone_index = select_index(param1)
-
+pinecone_index_list = select_index(param1)
+pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
 def chat(pinecone_index):
 
     if pinecone_index != "":
