@@ -55,6 +55,18 @@ def load_docs(files):
     # st.write(all_text)
     return all_text  
 
+param1 = True
+@st.cache_data
+def select_index(param1):
+    #time.sleep(10)
+    if param1:
+        st.sidebar.write("Existing Indexes:👇")
+        #st.sidebar.write(pinecone.list_indexes())
+        pinecone_index_list = pinecone.list_indexes()
+        #pinecone_index = st.sidebar.selectbox(label="Select Index", options=pinecone.list_indexes())
+        #pinecone_index = st.sidebar.text_input("Write Name of Index to load: ")
+    return pinecone_index_list
+
 if 'clicked' not in st.session_state:
     st.session_state.clicked = False
 
@@ -131,8 +143,10 @@ if passme == "manageme":
     
             time.sleep(10)
             st.write("Existing Indexes:👇")
-            st.write(pinecone.list_indexes())
-            pinecone_index = st.text_input("Write Name of Existing Index: ")
+            pinecone_index_list = select_index(param1)
+            pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
+            # st.write(pinecone.list_indexes())
+            # pinecone_index = st.text_input("Write Name of Existing Index: ")
             up_check = st.checkbox('Check this to Upload Docs in Selected Index')
             if up_check:
                 st.info('Initializing Document Uploading to DB...')
@@ -146,8 +160,10 @@ if passme == "manageme":
     elif third_opt:
         time.sleep(10)
         st.write("Existing Indexes:👇")
-        st.write(pinecone.list_indexes())
-        pinecone_index = st.text_input("Write Name of Existing Index to delete: ")
+        pinecone_index_list = select_index(param1)
+        pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
+        #st.write(pinecone.list_indexes())
+        #pinecone_index = st.text_input("Write Name of Existing Index to delete: ")
         st.write(f"The Index named '{pinecone_index}' is selected for deletion.")
         del_check = st.checkbox('Check this to Delete Index')
         if del_check:
