@@ -70,7 +70,7 @@ def chat():
     def conversational_chat(query):
         llm = ChatOpenAI(model=model_name)
         docs = db.similarity_search(query)#.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
-        st.write("""#### Data Sources:""")
+        st.sidebar.write("""##### Data Sources:""")
         st.sidebar.write(len(docs))
         st.sidebar.write(docs)
         qa = load_qa_chain(llm=llm, chain_type="stuff")
