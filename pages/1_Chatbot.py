@@ -57,7 +57,7 @@ def ret(pinecone_index):
         index = pinecone.Index(pinecone_index)
         db = Pinecone(index, embeddings.embed_query, text_field)
         retriever = db.as_retriever()
-    return retriever
+    return retriever, db
     
 def chat():
     # if pinecone_index != "":
@@ -66,10 +66,10 @@ def chat():
     #     index = pinecone.Index(pinecone_index)
     #     db = Pinecone(index, embeddings.embed_query, text_field)
     #     retriever = db.as_retriever()
-
+    retriever, db = ret(pinecone_index)
     def conversational_chat(query):
         llm = ChatOpenAI(model=model_name)
-        docs = db.similarity_search(query)
+        docs = db.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
         qa = load_qa_chain(llm=llm, chain_type="stuff")
         # Run the query through the RetrievalQA model
         result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
