@@ -70,6 +70,7 @@ def chat():
     def conversational_chat(query):
         llm = ChatOpenAI(model=model_name)
         docs = db.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
+        st.sidebar.write(docs)
         qa = load_qa_chain(llm=llm, chain_type="stuff")
         # Run the query through the RetrievalQA model
         result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
