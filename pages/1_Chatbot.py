@@ -7,7 +7,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-
+from langchain.memory import ConversationBufferWindowMemory
 
 # Setting up Streamlit page configuration
 st.set_page_config(
@@ -73,7 +73,7 @@ def chat():
         st.sidebar.write("""##### Data Sources:""")
         st.sidebar.write(len(docs))
         st.sidebar.write(docs)
-        qa = load_qa_chain(llm=llm, chain_type="stuff")
+        qa = load_qa_chain(llm=llm, chain_type="stuff", memory=ConversationBufferMemory(k=3))
         # Run the query through the RetrievalQA model
         result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
         #st.session_state['history'].append((query, result))#["answer"]))
