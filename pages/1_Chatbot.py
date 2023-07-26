@@ -32,7 +32,7 @@ param1 = True
 def select_index(param1):
     #time.sleep(10)
     if param1:
-        st.sidebar.write("Existing Indexes:👇")
+        #st.sidebar.write("Existing Indexes:👇")
         #st.sidebar.write(pinecone.list_indexes())
         pinecone_index_list = pinecone.list_indexes()
         #pinecone_index = st.sidebar.selectbox(label="Select Index", options=pinecone.list_indexes())
