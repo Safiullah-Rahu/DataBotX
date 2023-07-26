@@ -7,7 +7,8 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.memory import ConversationBufferWindowMemory
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationalRetrievalChain
 
 # Setting up Streamlit page configuration
 st.set_page_config(
@@ -69,16 +70,19 @@ def chat():
     db = ret(pinecone_index)
     def conversational_chat(query):
         llm = ChatOpenAI(model=model_name)
-        docs = db.similarity_search(query)#.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
-        st.sidebar.write("""##### Data Sources:""")
-        st.sidebar.write(len(docs))
-        st.sidebar.write(docs)
-        qa = load_qa_chain(llm=llm, chain_type="stuff", memory=ConversationBufferWindowMemory(k=3))
+        # docs = db.similarity_search(query)#.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
+        # st.sidebar.write("""##### Data Sources:""")
+        # st.sidebar.write(len(docs))
+        # st.sidebar.write(docs)
+        memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+        qa = ConversationalRetrievalChain.from_llm(llm=llm, retriever = db.as_retriever(), memory=memory)
+        #qa = load_qa_chain(llm=llm, chain_type="stuff", memory=ConversationBufferWindowMemory(k=3))
         # Run the query through the RetrievalQA model
-        result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
+        result = qa({"question": query})
+        #result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
         #st.session_state['history'].append((query, result))#["answer"]))
 
-        return result   #["answer"]
+        return result["answer"]
 
 
     # Set a default model
