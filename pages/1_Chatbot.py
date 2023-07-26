@@ -48,14 +48,24 @@ model_name = st.sidebar.selectbox(label="Select Model", options=MODEL_OPTIONS)
 
 pinecone_index_list = select_index(param1)
 pinecone_index = st.sidebar.selectbox(label="Select Index", options = pinecone_index_list )
-def chat(pinecone_index):
 
+@st.cache_data
+def ret(pinecone_index):
     if pinecone_index != "":
         # load a Pinecone index
         time.sleep(5)
         index = pinecone.Index(pinecone_index)
         db = Pinecone(index, embeddings.embed_query, text_field)
         retriever = db.as_retriever()
+    return retriever
+    
+def chat():
+    # if pinecone_index != "":
+    #     # load a Pinecone index
+    #     time.sleep(5)
+    #     index = pinecone.Index(pinecone_index)
+    #     db = Pinecone(index, embeddings.embed_query, text_field)
+    #     retriever = db.as_retriever()
 
     def conversational_chat(query):
         llm = ChatOpenAI(model=model_name)
@@ -100,7 +110,7 @@ def chat(pinecone_index):
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 if pinecone_index != "":
-    chat(pinecone_index)
+    chat()
     #st.sidebar.write(st.session_state.messages)
     con_check = st.sidebar.checkbox("Check to Upload Conversation to loaded Index")
     if con_check:
