@@ -75,10 +75,13 @@ def chat():
         # st.sidebar.write(len(docs))
         # st.sidebar.write(docs)
         memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        qa = ConversationalRetrievalChain.from_llm(llm=llm, retriever = db.as_retriever(), memory=memory)
+        qa = ConversationalRetrievalChain.from_llm(llm=llm, retriever = db.as_retriever(), memory=memory, return_source_documents=True)
         #qa = load_qa_chain(llm=llm, chain_type="stuff", memory=ConversationBufferWindowMemory(k=3))
         # Run the query through the RetrievalQA model
         result = qa({"question": query})
+        st.sidebar.write("""##### Data Sources:""")
+        st.sidebar.write(result['source_documents'])
+        st.sidebar.write(memory.load_memory_variables({}))
         #result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
         #st.session_state['history'].append((query, result))#["answer"]))
 
