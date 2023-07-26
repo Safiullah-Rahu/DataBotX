@@ -58,7 +58,7 @@ def ret(pinecone_index):
         db = Pinecone(index, embeddings.embed_query, text_field)
         #retriever = db.as_retriever()
     return db#retriever, db
-    
+con_check = st.sidebar.checkbox("Check to Upload Conversation to loaded Index")
 def chat():
     # if pinecone_index != "":
     #     # load a Pinecone index
@@ -114,7 +114,7 @@ def chat():
 if pinecone_index != "":
     chat()
     #st.sidebar.write(st.session_state.messages)
-    con_check = st.sidebar.checkbox("Check to Upload Conversation to loaded Index")
+    # con_check = st.sidebar.checkbox("Check to Upload Conversation to loaded Index")
     if con_check:
         text = []
         for item in st.session_state.messages:
