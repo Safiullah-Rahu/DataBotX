@@ -73,7 +73,7 @@ def chat():
         st.sidebar.write("""##### Data Sources:""")
         st.sidebar.write(len(docs))
         st.sidebar.write(docs)
-        qa = load_qa_chain(llm=llm, chain_type="stuff", memory=ConversationBufferMemory(k=3))
+        qa = load_qa_chain(llm=llm, chain_type="stuff", memory=ConversationBufferWindowMemory(k=3))
         # Run the query through the RetrievalQA model
         result = qa.run(input_documents=docs, question=query) #chain({"question": query, "chat_history": st.session_state['history']})
         #st.session_state['history'].append((query, result))#["answer"]))
