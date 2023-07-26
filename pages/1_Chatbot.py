@@ -69,7 +69,7 @@ def chat():
     db = ret(pinecone_index)
     def conversational_chat(query):
         llm = ChatOpenAI(model=model_name)
-        docs = db.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
+        docs = db.similarity_search(query)#.max_marginal_relevance_search(query, k=2, fetch_k=10)#.similarity_search(query)
         st.sidebar.write(docs)
         qa = load_qa_chain(llm=llm, chain_type="stuff")
         # Run the query through the RetrievalQA model
