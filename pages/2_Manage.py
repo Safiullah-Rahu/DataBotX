@@ -8,6 +8,7 @@ from langchain.vectorstores import Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import WebBaseLoader
+from langchain.document_loaders import UnstructuredURLLoader
 
 
 # Setting up Streamlit page configuration
@@ -51,9 +52,11 @@ def select_index():
     return pinecone_index_list
 @st.cache_data
 def web_load(website):
-    loader = WebBaseLoader(website)
-    loader.requests_kwargs = {'verify':False}
+    loader = UnstructuredURLLoader(urls=urls)
     docs = loader.load()
+    # loader = WebBaseLoader(website)
+    # loader.requests_kwargs = {'verify':False}
+    # docs = loader.load()
     return docs
 
 def manage_chat():
