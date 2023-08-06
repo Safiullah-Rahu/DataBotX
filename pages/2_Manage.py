@@ -49,6 +49,12 @@ def load_docs(files):
 def select_index():
     pinecone_index_list = pinecone.list_indexes()
     return pinecone_index_list
+@st.cache_data
+def web_load(website):
+    loader = WebBaseLoader(website)
+    loader.requests_kwargs = {'verify':False}
+    docs = loader.load()
+    return docs
 
 def manage_chat():
 
@@ -153,9 +159,10 @@ def manage_chat():
                 website_ = st.text_input("Enter website URL:")
                 if website_ != "":
                     st.info('Initializing Website Loading...')
-                    loader = WebBaseLoader(website_)
-                    loader.requests_kwargs = {'verify':False}
-                    docs = loader.load()
+                    # loader = WebBaseLoader(website_)
+                    # loader.requests_kwargs = {'verify':False}
+                    # docs = loader.load()
+                    docs = web_load(website_)
                     st.success('Website Successfully Loaded!')
 
             # Initialize OpenAI embeddings
