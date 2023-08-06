@@ -8,3 +8,4 @@ PyPDF2
 pdfplumber
 openpyxl
 duckduckgo-search
+bs4
