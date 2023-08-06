@@ -52,11 +52,12 @@ def select_index():
     return pinecone_index_list
 @st.cache_data
 def web_load(website):
-    loader = UnstructuredURLLoader(urls=urls)
-    docs = loader.load()
-    # loader = WebBaseLoader(website)
-    # loader.requests_kwargs = {'verify':False}
+    # loader = UnstructuredURLLoader(urls=urls)
     # docs = loader.load()
+    st.info('Initializing Website Loading...')
+    loader = WebBaseLoader(website)
+    #loader.requests_kwargs = {'verify':False}
+    docs = loader.load()
     return docs
 
 def manage_chat():
@@ -161,7 +162,7 @@ def manage_chat():
                 #web_list = []
                 website_ = st.text_input("Enter website URL:")
                 if website_ != "":
-                    st.info('Initializing Website Loading...')
+                    # st.info('Initializing Website Loading...')
                     # loader = WebBaseLoader(website_)
                     # loader.requests_kwargs = {'verify':False}
                     # docs = loader.load()
