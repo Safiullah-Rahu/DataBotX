@@ -80,53 +80,57 @@ def manage_chat():
         doc_ = col1.checkbox("Upload Documents [PDF/TXT]")
         url_ = col2.checkbox("Upload Website Content [URL]")
         # Prompt the user to upload PDF/TXT files
-        if doc_:
-            st.write("Upload PDF/TXT Files:")
-            uploaded_files = st.file_uploader("Upload", type=["pdf", "txt"], label_visibility="collapsed", accept_multiple_files = True)
-            if uploaded_files != []:
-                st.info('Initializing Document Loading...')
-                documents = load_docs(uploaded_files)
-                text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-                docs = text_splitter.create_documents(documents)
-                st.success("Document Loaded Successfully!")
-        elif url_:
-            #web_list = []
-            website_ = st.text_input("Enter website URL:")
-            if website_ != "":
-                st.info('Initializing Website Loading...')
-                loader = WebBaseLoader(website_)
-                loader.requests_kwargs = {'verify':False}
-                docs = loader.load()
-                st.success('Website Successfully Loaded!')
-
-
-
-        # Initialize OpenAI embeddings
-        embeddings = OpenAIEmbeddings(model = 'text-embedding-ada-002')
-
-        # Display the uploaded file content
-        file_container = st.expander(f"Click here to see your uploaded content:")
-        file_container.write(docs)
-
-        # Display success message
-        # st.success("Document Loaded Successfully!")
-        pinecone_index = st.text_input("Enter the name of Index: ")
-        if pinecone_index != "":
-            st.info('Initializing Index Creation...')
-            # Create a new Pinecone index
-            pinecone.create_index(
-                    name=pinecone_index,
-                    metric='cosine',
-                    dimension=1536  # 1536 dim of text-embedding-ada-002
-                    )
-            st.success('Index Successfully Created!')
-            time.sleep(80)
-            st.info('Initializing Document Uploading to DB...')
-            # Upload documents to the Pinecone index
-            vector_store = Pinecone.from_documents(docs, embeddings, index_name=pinecone_index)
-            
+        try:
+            if doc_:
+                st.write("Upload PDF/TXT Files:")
+                uploaded_files = st.file_uploader("Upload", type=["pdf", "txt"], label_visibility="collapsed", accept_multiple_files = True)
+                if uploaded_files != []:
+                    st.info('Initializing Document Loading...')
+                    documents = load_docs(uploaded_files)
+                    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+                    docs = text_splitter.create_documents(documents)
+                    st.success("Document Loaded Successfully!")
+            elif url_:
+                #web_list = []
+                website_ = st.text_input("Enter website URL:")
+                if website_ != "":
+                    st.info('Initializing Website Loading...')
+                    loader = WebBaseLoader(website_)
+                    loader.requests_kwargs = {'verify':False}
+                    docs = loader.load()
+                    st.success('Website Successfully Loaded!')
+    
+    
+    
+            # Initialize OpenAI embeddings
+            embeddings = OpenAIEmbeddings(model = 'text-embedding-ada-002')
+    
+            # Display the uploaded file content
+            file_container = st.expander(f"Click here to see your uploaded content:")
+            file_container.write(docs)
+    
             # Display success message
-            st.success("Document Uploaded Successfully!")
+            # st.success("Document Loaded Successfully!")
+            pinecone_index = st.text_input("Enter the name of Index: ")
+            if pinecone_index != "":
+                st.info('Initializing Index Creation...')
+                # Create a new Pinecone index
+                pinecone.create_index(
+                        name=pinecone_index,
+                        metric='cosine',
+                        dimension=1536  # 1536 dim of text-embedding-ada-002
+                        )
+                st.success('Index Successfully Created!')
+                time.sleep(80)
+                st.info('Initializing Document Uploading to DB...')
+                # Upload documents to the Pinecone index
+                vector_store = Pinecone.from_documents(docs, embeddings, index_name=pinecone_index)
+                
+                # Display success message
+                st.success("Document Uploaded Successfully!")
+        except:
+            st.sidebar.write("Try again!")
+                
         
 
     elif manage_opts == "Use Existing Index":
