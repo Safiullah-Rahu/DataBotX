@@ -129,7 +129,7 @@ def manage_chat():
                 # Display success message
                 st.success("Document Uploaded Successfully!")
         except:
-            st.toast("Select any one option to proceed.")
+            st.sidebar.write("Try again!")
 
     elif manage_opts == "Use Existing Index":
         st.header("Use Existing Index to Upload Documents")
