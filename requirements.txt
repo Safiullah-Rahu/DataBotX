@@ -8,3 +8,5 @@ PyPDF2
 pdfplumber
 openpyxl
 duckduckgo-search
+python-libmagic
+python-magic-bin
